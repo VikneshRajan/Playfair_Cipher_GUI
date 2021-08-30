@@ -38,19 +38,12 @@ def prepare_input(dirty):
  
 def generate_table(key):
  
-    # I and J are used interchangeably to allow
-    # us to use a 5x5 table (25 letters)
     alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
-    # we're using a list instead of a '2d' array because it makes the math
-    # for setting up the table and doing the actual encoding/decoding simpler
     table = []
- 
-    # copy key chars into the table if they are in `alphabet` ignoring duplicates
     for char in key.upper():
         if char not in table and char in alphabet:
             table.append(char)
- 
-    # fill the rest of the table in with the remaining alphabet chars
+
     for char in alphabet:
         if char not in table:
             table.append(char)
@@ -63,7 +56,6 @@ def encode(plaintext, key):
     plaintext = prepare_input(plaintext)
     ciphertext = ""
  
-    # https://en.wikipedia.org/wiki/Playfair_cipher#Description
     for char1, char2 in chunker(plaintext, 2):
         row1, col1 = divmod(table.index(char1), 5)
         row2, col2 = divmod(table.index(char2), 5)
@@ -84,8 +76,7 @@ def encode(plaintext, key):
 def decode(ciphertext, key):
     table = generate_table(key)
     plaintext = ""
- 
-    # https://en.wikipedia.org/wiki/Playfair_cipher#Description
+
     for char1, char2 in chunker(ciphertext, 2):
         row1, col1 = divmod(table.index(char1), 5)
         row2, col2 = divmod(table.index(char2), 5)
